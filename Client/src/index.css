@@ -621,3 +621,39 @@ tr:last-child td {
     width: 100%;
   }
 }
+/* --- Button Click Feedback --- */
+.btn:active {
+  transform: scale(0.95); /* Shrinks button on click */
+}
+
+/* --- Page Transition Helper Classes --- */
+.page-content {
+  width: 100%;
+}
+/* --- Button Tilt Animation --- */
+.btn-tilt {
+  transition: all 0.3s ease;
+  transform-style: preserve-3d;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-tilt:hover {
+  transform: translateY(-5px) rotateX(10deg) rotateY(5deg);
+  box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3); /* Colored shadow */
+}
+
+.btn-tilt:active {
+  transform: translateY(0) rotateX(0deg) rotateY(0deg);
+}
+
+/* --- Background Fix --- */
+.hero {
+  /* Ensures background covers full screen height */
+  min-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+/* --- Library Background Class (Fix for Image Not Showing) --- */
+
+
