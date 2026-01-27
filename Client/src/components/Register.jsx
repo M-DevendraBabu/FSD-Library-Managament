@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom"; // <--- ADDED useNavigate
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { User, Mail, Lock, GraduationCap, Shield } from "lucide-react";
 
 const Register = () => {
-  const navigate = useNavigate(); // <--- INITIALIZE HOOK
+  const navigate = useNavigate();
   const [role, setRole] = useState("student");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -12,117 +12,198 @@ const Register = () => {
     e.preventDefault();
     setIsLoading(true);
 
-    // Simulating API Call
     setTimeout(() => {
       setIsLoading(false);
-      alert("Registration Successful! Redirecting to Login...");
-      navigate("/login"); // <--- REDIRECT TO LOGIN
+      navigate("/login");
     }, 2000);
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      className="auth-page"
+    <div
+      style={{
+        minHeight: "100vh",
+        width: "100%",
+        backgroundImage:
+          "url(https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=2400&q=80)",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        position: "relative",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
     >
-      <div className="auth-card">
-        <div className="auth-header">
-          <h2 className="auth-title">Create Account</h2>
-          <p className="auth-subtitle">Join the library community</p>
+      {/* OVERLAY */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          background:
+            "linear-gradient(to bottom, rgba(15,23,42,0.65), rgba(15,23,42,0.45))",
+        }}
+      />
+
+      {/* CARD */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        style={{
+          position: "relative",
+          width: "100%",
+          maxWidth: "420px",
+          background: "#ffffff",
+          borderRadius: "1.5rem",
+          padding: "2rem",
+          boxShadow: "0 25px 50px rgba(0,0,0,0.25)",
+        }}
+      >
+        {/* HEADER */}
+        <div style={{ textAlign: "center", marginBottom: "1.5rem" }}>
+          <h2 style={{ fontSize: "1.9rem", fontWeight: 700 }}>
+            Create Account
+          </h2>
+          <p style={{ color: "#64748B", marginTop: "0.4rem" }}>
+            Join the library community
+          </p>
         </div>
 
-        <div className="role-grid">
+        {/* ROLE SELECTION */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: "1rem",
+            marginBottom: "1.5rem",
+          }}
+        >
           <div
-            className={`role-card ${role === "student" ? "selected" : ""}`}
             onClick={() => setRole("student")}
+            style={{
+              cursor: "pointer",
+              padding: "1rem",
+              borderRadius: "0.75rem",
+              border:
+                role === "student" ? "2px solid #6366F1" : "1px solid #E5E7EB",
+              background: role === "student" ? "#EEF2FF" : "#ffffff",
+              textAlign: "center",
+              fontWeight: 500,
+            }}
           >
-            <GraduationCap className="role-card-icon" size={32} />
-            <div style={{ fontWeight: "600" }}>Student</div>
+            <GraduationCap size={26} />
+            <div style={{ marginTop: "0.4rem" }}>Student</div>
           </div>
+
           <div
-            className={`role-card ${role === "admin" ? "selected" : ""}`}
             onClick={() => setRole("admin")}
+            style={{
+              cursor: "pointer",
+              padding: "1rem",
+              borderRadius: "0.75rem",
+              border:
+                role === "admin" ? "2px solid #6366F1" : "1px solid #E5E7EB",
+              background: role === "admin" ? "#EEF2FF" : "#ffffff",
+              textAlign: "center",
+              fontWeight: 500,
+            }}
           >
-            <Shield className="role-card-icon" size={32} />
-            <div style={{ fontWeight: "600" }}>Admin</div>
+            <Shield size={26} />
+            <div style={{ marginTop: "0.4rem" }}>Admin</div>
           </div>
         </div>
 
-        {/* ADDED onSubmit to the form */}
+        {/* FORM */}
         <form onSubmit={handleRegister}>
-          <div className="form-group">
-            <label className="form-label">Full Name</label>
-            <div className="input-wrapper">
-              <User className="input-icon" size={20} />
-              <input
-                type="text"
-                className="form-input"
-                placeholder="John Doe"
-                required
-              />
+          {[
+            {
+              label: "Full Name",
+              type: "text",
+              placeholder: "John Doe",
+              icon: <User size={18} />,
+            },
+            {
+              label: "Email Address",
+              type: "email",
+              placeholder: "you@example.com",
+              icon: <Mail size={18} />,
+            },
+            {
+              label: "Password",
+              type: "password",
+              placeholder: "••••••••",
+              icon: <Lock size={18} />,
+            },
+          ].map((field, index) => (
+            <div key={index} style={{ marginBottom: "1rem" }}>
+              <label style={{ fontWeight: 500 }}>{field.label}</label>
+              <div style={{ position: "relative", marginTop: "0.4rem" }}>
+                <span
+                  style={{
+                    position: "absolute",
+                    left: "12px",
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    color: "#94A3B8",
+                  }}
+                >
+                  {field.icon}
+                </span>
+                <input
+                  type={field.type}
+                  required
+                  placeholder={field.placeholder}
+                  style={{
+                    width: "100%",
+                    padding: "0.65rem 0.75rem 0.65rem 2.4rem",
+                    borderRadius: "0.5rem",
+                    border: "1px solid #CBD5E1",
+                  }}
+                />
+              </div>
             </div>
-          </div>
+          ))}
 
-          <div className="form-group">
-            <label className="form-label">Email Address</label>
-            <div className="input-wrapper">
-              <Mail className="input-icon" size={20} />
-              <input
-                type="email"
-                className="form-input"
-                placeholder="you@example.com"
-                required
-              />
-            </div>
-          </div>
-
-          <div className="form-group">
-            <label className="form-label">Password</label>
-            <div className="input-wrapper">
-              <Lock className="input-icon" size={20} />
-              <input
-                type="password"
-                className="form-input"
-                placeholder="••••••••"
-                required
-              />
-            </div>
-          </div>
-
-          <button
-            className="btn btn-primary btn-full"
-            style={{ marginTop: "1rem" }}
+          {/* 🔥 ANIMATED BUTTON */}
+          <motion.button
+            type="submit"
             disabled={isLoading}
+            whileHover={!isLoading ? { scale: 1.03 } : {}}
+            whileTap={!isLoading ? { scale: 0.95 } : {}}
+            transition={{ type: "spring", stiffness: 300, damping: 18 }}
+            style={{
+              width: "100%",
+              padding: "0.75rem",
+              borderRadius: "999px",
+              border: "none",
+              background: isLoading ? "#A5B4FC" : "#6366F1",
+              color: "#ffffff",
+              fontWeight: 600,
+              marginTop: "0.5rem",
+              cursor: isLoading ? "not-allowed" : "pointer",
+            }}
           >
             {isLoading
               ? "Creating Account..."
               : `Register as ${role.charAt(0).toUpperCase() + role.slice(1)}`}
-          </button>
+          </motion.button>
         </form>
 
-        <div
+        {/* FOOTER */}
+        <p
           style={{
-            marginTop: "1.5rem",
             textAlign: "center",
+            marginTop: "1.2rem",
             fontSize: "0.9rem",
-            color: "#64748B",
           }}
         >
           Already have an account?{" "}
-          <Link
-            to="/login"
-            style={{
-              color: "#4F46E5",
-              fontWeight: "600",
-              textDecoration: "none",
-            }}
-          >
+          <Link to="/login" style={{ color: "#6366F1", fontWeight: 600 }}>
             Login here
           </Link>
-        </div>
-      </div>
-    </motion.div>
+        </p>
+      </motion.div>
+    </div>
   );
 };
 
