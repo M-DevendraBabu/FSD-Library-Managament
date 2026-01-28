@@ -34,7 +34,7 @@ const Register = () => {
         justifyContent: "center",
       }}
     >
-      {/* OVERLAY */}
+      
       <div
         style={{
           position: "absolute",
@@ -44,7 +44,7 @@ const Register = () => {
         }}
       />
 
-      {/* CARD */}
+    
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
@@ -59,7 +59,7 @@ const Register = () => {
           boxShadow: "0 25px 50px rgba(0,0,0,0.25)",
         }}
       >
-        {/* HEADER */}
+       
         <div style={{ textAlign: "center", marginBottom: "1.5rem" }}>
           <h2 style={{ fontSize: "1.9rem", fontWeight: 700 }}>
             Create Account
@@ -69,7 +69,7 @@ const Register = () => {
           </p>
         </div>
 
-        {/* ROLE SELECTION */}
+       
         <div
           style={{
             display: "grid",
@@ -113,7 +113,7 @@ const Register = () => {
           </div>
         </div>
 
-        {/* FORM */}
+       
         <form onSubmit={handleRegister}>
           {[
             {
@@ -164,7 +164,7 @@ const Register = () => {
             </div>
           ))}
 
-          {/* 🔥 ANIMATED BUTTON */}
+         
           <motion.button
             type="submit"
             disabled={isLoading}
@@ -189,7 +189,7 @@ const Register = () => {
           </motion.button>
         </form>
 
-        {/* FOOTER */}
+      
         <p
           style={{
             textAlign: "center",

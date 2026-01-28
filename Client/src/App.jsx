@@ -6,7 +6,7 @@ import Register from "./components/Register";
 import UserDashboard from "./components/UserDashboard";
 
 function App() {
-  const location = useLocation(); // ✅ now valid
+  const location = useLocation(); 
 
   return (
     <div className="app-wrapper">

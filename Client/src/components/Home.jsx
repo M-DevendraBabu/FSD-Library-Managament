@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, Users, Lock, BookOpen } from "lucide-react";
+import { ArrowRight, Users, Lock, BookOpen, Shield, Search, UserCheck } from "lucide-react";
 import { motion } from "framer-motion";
 import libraryBg from "../assets/library-bg.jpg";
 
@@ -18,7 +18,7 @@ const Home = () => {
           color: "#fff",
         }}
       >
-        {/* 🎬 Cinematic dark gradient (NO blur, NO white) */}
+        
         <div
           style={{
             position: "absolute",
@@ -29,7 +29,7 @@ const Home = () => {
           }}
         />
 
-        {/* Top-right buttons */}
+        
         <div
           style={{
             position: "absolute",
@@ -48,7 +48,7 @@ const Home = () => {
           </Link>
         </div>
 
-        {/* HERO CONTENT (NO BOX) */}
+       
         <div
           className="container"
           style={{
@@ -117,14 +117,14 @@ const Home = () => {
             <Link to="/register" className="btn btn-primary btn-tilt">
               Get Started <ArrowRight size={20} />
             </Link>
-            <Link to="/login" className="btn btn-secondary btn-tilt">
+            <Link to="/login" className="btn btn-outline" style={{ color: "white", borderColor: "rgba(255,255,255,0.5)" }}>
               Login
             </Link>
           </motion.div>
         </div>
       </section>
 
-      {/* FEATURES SECTION */}
+      
       <section className="features-section">
         <div className="container">
           <div style={{ textAlign: "center", marginBottom: "3rem" }}>
@@ -135,23 +135,66 @@ const Home = () => {
           </div>
 
           <div className="grid-3">
+            {/* Card 1: User Management */}
             <div className="feature-card">
-              <Users />
+              <div className="feature-card-decoration"></div>
+              <div className="feature-icon-box">
+                <UserCheck size={32} />
+              </div>
               <h3>User Management</h3>
-              <p>Manage students and staff with ease.</p>
+              <p>Manage students and staff with ease. Track user activity and streamline onboarding with intuitive controls.</p>
+              <span className="feature-badge">Easy Setup</span>
             </div>
 
+            {/* Card 2: Digital Catalog */}
             <div className="feature-card">
-              <BookOpen />
+              <div className="feature-card-decoration"></div>
+              <div className="feature-icon-box">
+                <Search size={32} />
+              </div>
               <h3>Digital Catalog</h3>
-              <p>Search and manage books in real time.</p>
+              <p>Search and manage books in real time. Advanced filtering and instant availability checks at your fingertips.</p>
+              <span className="feature-badge">Real-time Search</span>
             </div>
 
+            {/* Card 3: Secure Access */}
             <div className="feature-card">
-              <Lock />
+              <div className="feature-card-decoration"></div>
+              <div className="feature-icon-box">
+                <Shield size={32} />
+              </div>
               <h3>Secure Access</h3>
-              <p>Role-based authentication and protection.</p>
+              <p>Role-based authentication ensures data security. Protect sensitive information with granular permissions.</p>
+              <span className="feature-badge">Enterprise Security</span>
             </div>
+          </div>
+
+          {/* CTA Section */}
+          <div style={{
+            textAlign: "center",
+            marginTop: "4rem",
+            padding: "3rem",
+            background: "linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)",
+            borderRadius: "var(--radius-xl)",
+            border: "1px solid rgba(0, 0, 0, 0.05)"
+          }}>
+            <h3 style={{ fontSize: "1.875rem", fontWeight: "bold", marginBottom: "1rem" }}>
+              Ready to Transform Your Library?
+            </h3>
+            <p style={{ 
+              color: "#64748B", 
+              fontSize: "1.125rem", 
+              maxWidth: "600px", 
+              margin: "0 auto 2rem" 
+            }}>
+              Join hundreds of institutions already using LibraFlow to manage their libraries efficiently.
+            </p>
+            <Link to="/register" className="btn btn-primary btn-tilt" style={{ 
+              fontSize: "1.125rem", 
+              padding: "0.875rem 2.5rem" 
+            }}>
+              Start Free Trial <ArrowRight size={20} />
+            </Link>
           </div>
         </div>
       </section>

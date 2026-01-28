@@ -10,7 +10,7 @@ import {
   Eye,
   EyeOff,
 } from "lucide-react";
-import libraryBg from "../assets/login-bg.jpg"; // 🔹 use JPG
+import libraryBg from "../assets/login-bg.jpg"; 
 
 const Login = () => {
   const navigate = useNavigate();
@@ -41,20 +41,20 @@ const Login = () => {
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
         position: "relative",
-        filter: "contrast(1.08) saturate(1.05)", // ✅ subtle clarity boost
+        filter: "contrast(1.08) saturate(1.05)", // 
       }}
     >
-      {/* ✅ STRONG, EVEN DARK OVERLAY */}
+      
       <div
         style={{
           position: "absolute",
           inset: 0,
-          background: "rgba(0,0,0,0.55)", // 🔹 uniform & darker
+          background: "rgba(0,0,0,0.55)", 
           zIndex: 0,
         }}
       />
 
-      {/* LOGIN CONTENT */}
+      
       <motion.div
         initial={{ opacity: 0, y: 25 }}
         animate={{ opacity: 1, y: 0 }}
@@ -82,7 +82,7 @@ const Login = () => {
             </p>
           </div>
 
-          {/* ROLE TOGGLE */}
+         
           <div className="role-toggle">
             <div
               className={`role-option ${role === "student" ? "active" : ""}`}

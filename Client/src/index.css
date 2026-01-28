@@ -29,7 +29,7 @@ body {
   line-height: 1.5;
 }
 
-/* --- Utility Classes --- */
+
 .container {
   max-width: 1200px;
   margin: 0 auto;
@@ -48,7 +48,7 @@ body {
   gap: 2rem;
 }
 
-/* --- Buttons --- */
+
 .btn {
   display: inline-flex;
   align-items: center;
@@ -89,15 +89,15 @@ body {
   width: 100%;
 }
 
-/* --- Hero Section --- */
+
 .hero {
   position: relative;
-  padding-top: 4rem; /* Reduced from nav-height + 4rem */
+  padding-top: 4rem; 
   padding-bottom: 4rem;
   overflow: hidden;
 }
 
-/* Background Blobs Animation */
+
 .blob {
   position: absolute;
   border-radius: 50%;
@@ -184,44 +184,185 @@ body {
   transform: rotateY(0) rotateX(0);
 }
 
-/* --- Features --- */
+
 .features-section {
   padding: 5rem 0;
   background: white;
 }
 
+/* Light Color Feature Cards - Updated Styles */
 .feature-card {
   background: var(--bg-color);
-  padding: 2rem;
+  padding: 2.5rem 2rem;
   border-radius: var(--radius-xl);
   transition: all 0.3s ease;
   border: 1px solid transparent;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  cursor: pointer;
+}
+
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  z-index: 2;
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
 }
 
 .feature-card:hover {
   transform: translateY(-5px);
-  background: white;
   box-shadow: var(--shadow-lg);
   border-color: rgba(79, 70, 229, 0.1);
 }
 
+.feature-card h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 1.5rem 0 1rem;
+  color: var(--text-main);
+}
+
+.feature-card p {
+  color: var(--text-muted);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* Light Color Variations for Each Card */
+.feature-card:nth-child(1) {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border-color: #bae6fd;
+}
+
+.feature-card:nth-child(2) {
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  border-color: #bbf7d0;
+}
+
+.feature-card:nth-child(3) {
+  background: linear-gradient(135deg, #fef7ff 0%, #f3e8ff 100%);
+  border-color: #e9d5ff;
+}
+
+.feature-card:nth-child(1)::before {
+  background: linear-gradient(90deg, #0ea5e9, #3b82f6);
+}
+
+.feature-card:nth-child(2)::before {
+  background: linear-gradient(90deg, #10b981, #22c55e);
+}
+
+.feature-card:nth-child(3)::before {
+  background: linear-gradient(90deg, #8b5cf6, #a855f7);
+}
+
+/* Feature Icons Container - Updated Styles */
 .feature-icon-box {
-  width: 60px;
-  height: 60px;
-  background: white;
-  border-radius: 50%;
+  width: 72px;
+  height: 72px;
+  border-radius: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--primary);
+  margin: 0 auto;
+  transition: all 0.3s ease;
+  background: white;
   box-shadow: var(--shadow-sm);
-  margin-bottom: 1.5rem;
+  color: var(--primary);
   font-size: 1.5rem;
 }
 
-/* --- Auth Forms (Login/Register) --- */
+.feature-card:nth-child(1) .feature-icon-box {
+  color: #0ea5e9;
+  background: rgba(14, 165, 233, 0.1);
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.15);
+}
+
+.feature-card:nth-child(2) .feature-icon-box {
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.1);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
+}
+
+.feature-card:nth-child(3) .feature-icon-box {
+  color: #8b5cf6;
+  background: rgba(139, 92, 246, 0.1);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.15);
+}
+
+.feature-card:hover .feature-icon-box {
+  transform: scale(1.1) rotate(5deg);
+}
+
+/* Feature card decorative elements */
+.feature-card-decoration {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  opacity: 0.05;
+  z-index: -1;
+  transition: all 0.5s ease;
+}
+
+.feature-card:nth-child(1) .feature-card-decoration {
+  background: #0ea5e9;
+  top: -40px;
+  right: -40px;
+}
+
+.feature-card:nth-child(2) .feature-card-decoration {
+  background: #10b981;
+  bottom: -40px;
+  left: -40px;
+}
+
+.feature-card:nth-child(3) .feature-card-decoration {
+  background: #8b5cf6;
+  top: -40px;
+  left: -40px;
+}
+
+.feature-card:hover .feature-card-decoration {
+  transform: scale(1.1);
+  opacity: 0.08;
+}
+
+/* Feature Badges */
+.feature-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-top: 1.5rem;
+}
+
+.feature-card:nth-child(1) .feature-badge {
+  background: rgba(14, 165, 233, 0.1);
+  color: #0ea5e9;
+}
+
+.feature-card:nth-child(2) .feature-badge {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+
+.feature-card:nth-child(3) .feature-badge {
+  background: rgba(139, 92, 246, 0.1);
+  color: #8b5cf6;
+}
+
+
 .auth-page {
-  min-height: 100vh; /* Updated to fill screen since navbar is gone */
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -255,7 +396,7 @@ body {
   color: var(--text-muted);
 }
 
-/* Role Toggle (Segmented Control) */
+
 .role-toggle {
   display: flex;
   background: var(--bg-color);
@@ -286,7 +427,7 @@ body {
   box-shadow: var(--shadow-sm);
 }
 
-/* Inputs */
+
 .form-group {
   margin-bottom: 1.5rem;
 }
@@ -329,7 +470,7 @@ body {
   box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
 }
 
-/* Role Selection Cards (Register) */
+
 .role-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -364,7 +505,7 @@ body {
   color: var(--primary);
 }
 
-/* --- Keyframes --- */
+
 @keyframes float {
   0%,
   100% {
@@ -385,7 +526,7 @@ body {
   }
 }
 
-/* Responsive */
+
 @media (max-width: 768px) {
   .hero-title {
     font-size: 2.5rem;
@@ -399,7 +540,7 @@ body {
     margin: 2rem 1rem;
   }
 }
-/* --- Dashboard Layout --- */
+
 .dashboard-container {
   display: flex;
   min-height: 100vh;
@@ -460,13 +601,13 @@ body {
 }
 
 .main-content {
-  margin-left: 260px; /* Width of sidebar */
+  margin-left: 260px; 
   flex: 1;
   padding: 2rem;
   width: calc(100% - 260px);
 }
 
-/* --- Dashboard Cards & Grid --- */
+
 .dashboard-header {
   display: flex;
   justify-content: space-between;
@@ -559,7 +700,7 @@ body {
   color: #991b1b;
 }
 
-/* --- Tables --- */
+
 .table-container {
   background: white;
   border-radius: var(--radius-xl);
@@ -590,7 +731,7 @@ tr:last-child td {
   border-bottom: none;
 }
 
-/* --- Notifications --- */
+
 .notification-item {
   background: white;
   padding: 1rem;
@@ -607,7 +748,7 @@ tr:last-child td {
   margin-top: 3px;
 }
 
-/* Mobile Responsive */
+
 @media (max-width: 768px) {
   .sidebar {
     transform: translateX(-100%);
@@ -621,16 +762,15 @@ tr:last-child td {
     width: 100%;
   }
 }
-/* --- Button Click Feedback --- */
+
 .btn:active {
-  transform: scale(0.95); /* Shrinks button on click */
+  transform: scale(0.95); 
 }
 
-/* --- Page Transition Helper Classes --- */
+
 .page-content {
   width: 100%;
 }
-/* --- Button Tilt Animation --- */
 .btn-tilt {
   transition: all 0.3s ease;
   transform-style: preserve-3d;
@@ -639,21 +779,18 @@ tr:last-child td {
 
 .btn-tilt:hover {
   transform: translateY(-5px) rotateX(10deg) rotateY(5deg);
-  box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3); /* Colored shadow */
+  box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3); 
 }
 
 .btn-tilt:active {
   transform: translateY(0) rotateX(0deg) rotateY(0deg);
 }
 
-/* --- Background Fix --- */
+
 .hero {
-  /* Ensures background covers full screen height */
+ 
   min-height: 90vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
-/* --- Library Background Class (Fix for Image Not Showing) --- */
-
-
