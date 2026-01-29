@@ -34,7 +34,6 @@ const Register = () => {
         justifyContent: "center",
       }}
     >
-      
       <div
         style={{
           position: "absolute",
@@ -44,7 +43,6 @@ const Register = () => {
         }}
       />
 
-    
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
@@ -59,7 +57,6 @@ const Register = () => {
           boxShadow: "0 25px 50px rgba(0,0,0,0.25)",
         }}
       >
-       
         <div style={{ textAlign: "center", marginBottom: "1.5rem" }}>
           <h2 style={{ fontSize: "1.9rem", fontWeight: 700 }}>
             Create Account
@@ -69,7 +66,6 @@ const Register = () => {
           </p>
         </div>
 
-       
         <div
           style={{
             display: "grid",
@@ -113,7 +109,6 @@ const Register = () => {
           </div>
         </div>
 
-       
         <form onSubmit={handleRegister}>
           {[
             {
@@ -164,7 +159,6 @@ const Register = () => {
             </div>
           ))}
 
-         
           <motion.button
             type="submit"
             disabled={isLoading}
@@ -189,7 +183,6 @@ const Register = () => {
           </motion.button>
         </form>
 
-      
         <p
           style={{
             textAlign: "center",

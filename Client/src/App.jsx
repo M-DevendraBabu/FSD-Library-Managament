@@ -1,12 +1,18 @@
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import Home from "./components/Home";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import UserDashboard from "./components/UserDashboard";
+import BookCatalog from "./components/BookCatalog";
+import MyIssuedBooks from "./components/MyIssuedBooksPage";
+import ReserveBook from "./components/ReserveBookPage";
 
 function App() {
-  const location = useLocation(); 
+  const location = useLocation();
+
+  // Check if user is authenticated
+  const isAuthenticated = localStorage.getItem("isLoggedIn") === "true";
 
   return (
     <div className="app-wrapper">
@@ -57,18 +63,80 @@ function App() {
             }
           />
 
+          {/* Protected Routes - Only accessible when logged in */}
           <Route
             path="/dashboard"
             element={
-              <motion.div
-                initial={{ x: -50, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-                className="page-content"
-              >
-                <UserDashboard />
-              </motion.div>
+              isAuthenticated ? (
+                <motion.div
+                  initial={{ x: -50, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="page-content"
+                >
+                  <UserDashboard />
+                </motion.div>
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+
+          <Route
+            path="/catalog"
+            element={
+              isAuthenticated ? (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="page-content"
+                >
+                  <BookCatalog />
+                </motion.div>
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+
+          <Route
+            path="/my-books"
+            element={
+              isAuthenticated ? (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="page-content"
+                >
+                  <MyIssuedBooks />
+                </motion.div>
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+
+          <Route
+            path="/reserve"
+            element={
+              isAuthenticated ? (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="page-content"
+                >
+                  <ReserveBook />
+                </motion.div>
+              ) : (
+                <Navigate to="/login" />
+              )
             }
           />
         </Routes>

@@ -10,20 +10,39 @@ import {
   Eye,
   EyeOff,
 } from "lucide-react";
-import libraryBg from "../assets/login-bg.jpg"; 
+import libraryBg from "../assets/login-bg.jpg";
 
 const Login = () => {
   const navigate = useNavigate();
   const [role, setRole] = useState("student");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
 
   const handleLogin = (e) => {
     e.preventDefault();
     setIsLoading(true);
 
+    // Clear form data before login
+    setFormData({
+      email: "",
+      password: "",
+    });
+
     setTimeout(() => {
       setIsLoading(false);
+      localStorage.setItem("isLoggedIn", "true");
       if (role === "student") {
         navigate("/dashboard");
       } else {
@@ -41,20 +60,18 @@ const Login = () => {
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
         position: "relative",
-        filter: "contrast(1.08) saturate(1.05)", // 
+        filter: "contrast(1.08) saturate(1.05)",
       }}
     >
-      
       <div
         style={{
           position: "absolute",
           inset: 0,
-          background: "rgba(0,0,0,0.55)", 
+          background: "rgba(0,0,0,0.55)",
           zIndex: 0,
         }}
       />
 
-      
       <motion.div
         initial={{ opacity: 0, y: 25 }}
         animate={{ opacity: 1, y: 0 }}
@@ -82,17 +99,22 @@ const Login = () => {
             </p>
           </div>
 
-         
           <div className="role-toggle">
             <div
               className={`role-option ${role === "student" ? "active" : ""}`}
-              onClick={() => setRole("student")}
+              onClick={() => {
+                setRole("student");
+                setFormData({ email: "", password: "" }); // Clear form when switching roles
+              }}
             >
               <GraduationCap size={18} /> Student
             </div>
             <div
               className={`role-option ${role === "admin" ? "active" : ""}`}
-              onClick={() => setRole("admin")}
+              onClick={() => {
+                setRole("admin");
+                setFormData({ email: "", password: "" }); // Clear form when switching roles
+              }}
             >
               <Shield size={18} /> Admin
             </div>
@@ -105,13 +127,17 @@ const Login = () => {
                 <Mail className="input-icon" size={20} />
                 <input
                   type="email"
+                  name="email"
                   className="form-input"
                   placeholder={
                     role === "admin"
                       ? "admin@library.com"
                       : "student@college.edu"
                   }
+                  value={formData.email}
+                  onChange={handleInputChange}
                   required
+                  autoComplete="off"
                 />
               </div>
             </div>
@@ -122,10 +148,14 @@ const Login = () => {
                 <Lock className="input-icon" size={20} />
                 <input
                   type={showPassword ? "text" : "password"}
+                  name="password"
                   className="form-input"
                   placeholder="•••••••••"
+                  value={formData.password}
+                  onChange={handleInputChange}
                   style={{ paddingRight: "3rem" }}
                   required
+                  autoComplete="new-password"
                 />
                 <button
                   type="button"
