@@ -32,6 +32,7 @@ import {
   Flame,
   Coffee,
   BookText,
+  Brain,
 } from "lucide-react";
 
 const UserDashboard = () => {
@@ -50,6 +51,11 @@ const UserDashboard = () => {
     else if (path === "/catalog") setActiveTab("catalog");
     else if (path === "/my-books") setActiveTab("my-books");
     else if (path === "/reserve") setActiveTab("reserve");
+    else if (path === "/recommendations") setActiveTab("recommendations");
+    else if (path === "/notifications") setActiveTab("notifications");
+    else if (path === "/profile") setActiveTab("profile");
+    else if (path === "/book-details") setActiveTab("book-details");
+    else if (path === "/insights") setActiveTab("insights");
 
     // Set user data
     setUserData({
@@ -84,7 +90,7 @@ const UserDashboard = () => {
       id: "book-details",
       label: "Book Details",
       icon: <BookOpen size={20} />,
-      path: "#",
+      path: "/book-details",
       gradient: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
     },
     {
@@ -102,29 +108,29 @@ const UserDashboard = () => {
       gradient: "linear-gradient(135deg, #ec4899 0%, #db2777 100%)",
     },
     {
-      id: "insights",
-      label: "Reading Insights",
-      icon: <BarChart2 size={20} />,
-      path: "#",
+      id: "recommendations",
+      label: "AI Recommendations",
+      icon: <Brain size={20} />,
+      path: "/recommendations",
       gradient: "linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)",
     },
     {
       id: "notifications",
       label: "Notifications",
       icon: <Bell size={20} />,
-      path: "#",
+      path: "/notifications",
       gradient: "linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)",
     },
     {
       id: "profile",
       label: "Profile",
       icon: <User size={20} />,
-      path: "#",
+      path: "/profile",
       gradient: "linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)",
     },
   ];
 
-  // Dashboard Home Content with enhanced cards - Modified to remove Quick Actions
+  // Dashboard Home Content with enhanced cards
   const renderDashboardHome = () => (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -716,8 +722,6 @@ const UserDashboard = () => {
         </motion.div>
       </motion.div>
 
-      {/* QUICK ACTIONS SECTION REMOVED */}
-
       {/* Due Soon Table */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -891,7 +895,7 @@ const UserDashboard = () => {
                           {book.title}
                         </div>
                         <div style={{ fontSize: "0.875rem", color: "#64748b" }}>
-                          {book.author || "Various Authors"}
+                          Various Authors
                         </div>
                       </div>
                     </div>
@@ -968,7 +972,7 @@ const UserDashboard = () => {
     </motion.div>
   );
 
-  // Keep all your original render functions...
+  // Book Details Page
   const renderBookDetails = () => (
     <div style={{ maxWidth: "800px" }}>
       <h2
@@ -996,7 +1000,8 @@ const UserDashboard = () => {
     </div>
   );
 
-  const renderInsights = () => (
+  // AI Recommendations Page
+  const renderRecommendations = () => (
     <div
       style={{
         textAlign: "center",
@@ -1007,7 +1012,7 @@ const UserDashboard = () => {
         boxShadow: "0 20px 60px rgba(0,0,0,0.08)",
       }}
     >
-      <BarChart2 size={60} style={{ marginBottom: "1rem", opacity: 0.5 }} />
+      <Brain size={60} style={{ marginBottom: "1rem", opacity: 0.5 }} />
       <h2
         style={{
           marginBottom: "0.5rem",
@@ -1016,12 +1021,32 @@ const UserDashboard = () => {
           color: "#1e293b",
         }}
       >
-        Reading Insights
+        AI Book Recommendations
       </h2>
-      <p>AI recommendations and reading statistics will appear here.</p>
+      <p>Personalized book suggestions based on your reading history.</p>
+      <Link
+        to="/recommendations"
+        style={{
+          marginTop: "1.5rem",
+          padding: "0.875rem 2rem",
+          background: "linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)",
+          color: "white",
+          border: "none",
+          borderRadius: "10px",
+          cursor: "pointer",
+          fontWeight: "600",
+          textDecoration: "none",
+          display: "inline-flex",
+          alignItems: "center",
+          gap: "0.5rem",
+        }}
+      >
+        Go to Recommendations <ChevronRight size={16} />
+      </Link>
     </div>
   );
 
+  // Notifications Page
   const renderNotifications = () => (
     <div
       style={{
@@ -1045,9 +1070,29 @@ const UserDashboard = () => {
         Notifications
       </h2>
       <p>System alerts and due date reminders will appear here.</p>
+      <Link
+        to="/notifications"
+        style={{
+          marginTop: "1.5rem",
+          padding: "0.875rem 2rem",
+          background: "linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)",
+          color: "white",
+          border: "none",
+          borderRadius: "10px",
+          cursor: "pointer",
+          fontWeight: "600",
+          textDecoration: "none",
+          display: "inline-flex",
+          alignItems: "center",
+          gap: "0.5rem",
+        }}
+      >
+        Go to Notifications <ChevronRight size={16} />
+      </Link>
     </div>
   );
 
+  // Profile Page
   const renderProfile = () => (
     <div
       style={{
@@ -1071,6 +1116,33 @@ const UserDashboard = () => {
         Profile
       </h2>
       <p>User profile and settings will appear here.</p>
+    </div>
+  );
+
+  // Insights Page (kept for compatibility)
+  const renderInsights = () => (
+    <div
+      style={{
+        textAlign: "center",
+        padding: "4rem",
+        color: "#64748b",
+        background: "white",
+        borderRadius: "24px",
+        boxShadow: "0 20px 60px rgba(0,0,0,0.08)",
+      }}
+    >
+      <BarChart2 size={60} style={{ marginBottom: "1rem", opacity: 0.5 }} />
+      <h2
+        style={{
+          marginBottom: "0.5rem",
+          fontSize: "1.5rem",
+          fontWeight: "700",
+          color: "#1e293b",
+        }}
+      >
+        Reading Insights
+      </h2>
+      <p>AI recommendations and reading statistics will appear here.</p>
     </div>
   );
 
@@ -1398,8 +1470,7 @@ const UserDashboard = () => {
           </div>
 
           <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-            {/* REMOVED LOGOUT BUTTON FROM HEADER */}
-
+            {/* Notification Bell with Indicator */}
             <motion.div
               whileHover={{ scale: 1.1, rotate: 10 }}
               style={{
@@ -1413,6 +1484,10 @@ const UserDashboard = () => {
                 cursor: "pointer",
                 boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
                 position: "relative",
+              }}
+              onClick={() => {
+                setActiveTab("notifications");
+                navigate("/notifications");
               }}
             >
               <Bell size={20} color="#64748b" />
@@ -1431,6 +1506,7 @@ const UserDashboard = () => {
               />
             </motion.div>
 
+            {/* User Avatar */}
             <motion.div
               whileHover={{ scale: 1.05 }}
               style={{
@@ -1445,6 +1521,10 @@ const UserDashboard = () => {
                 color: "white",
                 fontSize: "1.125rem",
                 fontWeight: "600",
+              }}
+              onClick={() => {
+                setActiveTab("profile");
+                navigate("/profile");
               }}
             >
               {userData?.name?.charAt(0) || "U"}
@@ -1606,9 +1686,10 @@ const UserDashboard = () => {
               </div>
             )}
             {activeTab === "book-details" && renderBookDetails()}
-            {activeTab === "insights" && renderInsights()}
+            {activeTab === "recommendations" && renderRecommendations()}
             {activeTab === "notifications" && renderNotifications()}
             {activeTab === "profile" && renderProfile()}
+            {activeTab === "insights" && renderInsights()}
           </motion.div>
         </AnimatePresence>
       </main>

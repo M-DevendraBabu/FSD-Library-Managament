@@ -7,6 +7,9 @@ import UserDashboard from "./components/UserDashboard";
 import BookCatalog from "./components/BookCatalog";
 import MyIssuedBooks from "./components/MyIssuedBooksPage";
 import ReserveBook from "./components/ReserveBookPage";
+import BookDetails from "./components/BookDetailspage";
+import RecommendationPage from "./components/RecommendationPage";
+import NotificationPage from "./components/NotificationPage"; // Import the new NotificationPage
 
 function App() {
   const location = useLocation();
@@ -138,6 +141,92 @@ function App() {
                 <Navigate to="/login" />
               )
             }
+          />
+
+          <Route
+            path="/book-details"
+            element={
+              isAuthenticated ? (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="page-content"
+                >
+                  <BookDetails />
+                </motion.div>
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+
+          {/* RecommendationPage route */}
+          <Route
+            path="/recommendations"
+            element={
+              isAuthenticated ? (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
+                  className="page-content"
+                >
+                  <RecommendationPage />
+                </motion.div>
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+
+          {/* NotificationPage route */}
+          <Route
+            path="/notifications"
+            element={
+              isAuthenticated ? (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
+                  className="page-content"
+                >
+                  <NotificationPage />
+                </motion.div>
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+
+          {/* Profile route (optional - if you create a separate ProfilePage component) */}
+          {/* Uncomment and add if you create a separate ProfilePage component */}
+          {/* <Route
+            path="/profile"
+            element={
+              isAuthenticated ? (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="page-content"
+                >
+                  <ProfilePage />
+                </motion.div>
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          /> */}
+
+          {/* Optional: 404 redirect */}
+          <Route
+            path="*"
+            element={<Navigate to={isAuthenticated ? "/dashboard" : "/"} />}
           />
         </Routes>
       </AnimatePresence>

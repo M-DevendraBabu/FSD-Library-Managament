@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate, Link } from "react-router-dom"; // Added useNavigate
 import {
   Search,
   Filter,
@@ -21,9 +22,9 @@ import {
   BookText,
   ArrowDown,
 } from "lucide-react";
-import { Link } from "react-router-dom";
 
 const BookCatalog = () => {
+  const navigate = useNavigate(); // Added for navigation
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedFormat, setSelectedFormat] = useState("all");
@@ -277,8 +278,8 @@ const BookCatalog = () => {
   };
 
   const handleRead = (book) => {
-    alert(`📖 Opening "${book.title}" for reading...`);
-    // Open reading interface
+    // Navigate to book details page with book data
+    navigate("/book-details", { state: { book } });
   };
 
   const StarRating = ({ rating }) => {
@@ -1310,7 +1311,7 @@ const BookCatalog = () => {
                       <motion.button
                         whileHover={{ scale: 1.03 }}
                         whileTap={{ scale: 0.97 }}
-                        onClick={() => handleRead(book)}
+                        onClick={() => handleRead(book)} // Updated to use handleRead
                         style={{
                           flex: 2,
                           padding: "0.875rem",
