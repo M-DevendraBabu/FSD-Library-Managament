@@ -33,6 +33,7 @@ import {
   Coffee,
   BookText,
   Brain,
+  HelpCircle, // Added for Help & Support
 } from "lucide-react";
 
 const UserDashboard = () => {
@@ -56,6 +57,7 @@ const UserDashboard = () => {
     else if (path === "/profile") setActiveTab("profile");
     else if (path === "/book-details") setActiveTab("book-details");
     else if (path === "/insights") setActiveTab("insights");
+    else if (path === "/support") setActiveTab("support"); // Added for support
 
     // Set user data
     setUserData({
@@ -127,6 +129,14 @@ const UserDashboard = () => {
       icon: <User size={20} />,
       path: "/profile",
       gradient: "linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)",
+    },
+    // ADDED: Help & Support Option
+    {
+      id: "support",
+      label: "Help & Support",
+      icon: <HelpCircle size={20} />,
+      path: "/support",
+      gradient: "linear-gradient(135deg, #f97316 0%, #ea580c 100%)",
     },
   ];
 
@@ -1092,7 +1102,7 @@ const UserDashboard = () => {
     </div>
   );
 
-  // Profile Page
+  // Profile Page - Updated to navigate to actual Profile page
   const renderProfile = () => (
     <div
       style={{
@@ -1115,7 +1125,72 @@ const UserDashboard = () => {
       >
         Profile
       </h2>
-      <p>User profile and settings will appear here.</p>
+      <p>Manage your account settings and personal information.</p>
+      <Link
+        to="/profile"
+        style={{
+          marginTop: "1.5rem",
+          padding: "0.875rem 2rem",
+          background: "linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)",
+          color: "white",
+          border: "none",
+          borderRadius: "10px",
+          cursor: "pointer",
+          fontWeight: "600",
+          textDecoration: "none",
+          display: "inline-flex",
+          alignItems: "center",
+          gap: "0.5rem",
+        }}
+      >
+        Go to Profile <ChevronRight size={16} />
+      </Link>
+    </div>
+  );
+
+  // Help & Support Page
+  const renderSupport = () => (
+    <div
+      style={{
+        textAlign: "center",
+        padding: "4rem",
+        color: "#64748b",
+        background: "white",
+        borderRadius: "24px",
+        boxShadow: "0 20px 60px rgba(0,0,0,0.08)",
+      }}
+    >
+      <HelpCircle size={60} style={{ marginBottom: "1rem", opacity: 0.5 }} />
+      <h2
+        style={{
+          marginBottom: "0.5rem",
+          fontSize: "1.5rem",
+          fontWeight: "700",
+          color: "#1e293b",
+        }}
+      >
+        Help & Support
+      </h2>
+      <p>Get help, submit tickets, or contact our support team.</p>
+      <Link
+        to="/support"
+        style={{
+          marginTop: "1.5rem",
+          padding: "0.875rem 2rem",
+          background: "linear-gradient(135deg, #f97316 0%, #ea580c 100%)",
+          color: "white",
+          border: "none",
+          borderRadius: "10px",
+          cursor: "pointer",
+          fontWeight: "600",
+          textDecoration: "none",
+          display: "inline-flex",
+          alignItems: "center",
+          gap: "0.5rem",
+        }}
+      >
+        Go to Support <ChevronRight size={16} />
+      </Link>
     </div>
   );
 
@@ -1689,6 +1764,7 @@ const UserDashboard = () => {
             {activeTab === "recommendations" && renderRecommendations()}
             {activeTab === "notifications" && renderNotifications()}
             {activeTab === "profile" && renderProfile()}
+            {activeTab === "support" && renderSupport()} {/* Added Support */}
             {activeTab === "insights" && renderInsights()}
           </motion.div>
         </AnimatePresence>
