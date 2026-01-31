@@ -45,7 +45,22 @@ const UserDashboard = () => {
   const [hoveredCard, setHoveredCard] = useState(null);
   const [showUserMenu, setShowUserMenu] = useState(false);
 
+  // Add authentication check at the beginning
   useEffect(() => {
+    const isLoggedIn = localStorage.getItem("isLoggedIn");
+    const userType = localStorage.getItem("userType");
+
+    if (!isLoggedIn) {
+      navigate("/login");
+      return;
+    }
+
+    // If admin tries to access user dashboard, redirect to admin dashboard
+    if (userType === "admin") {
+      navigate("/admin-dashboard");
+      return;
+    }
+
     // Get active tab from URL
     const path = location.pathname;
     if (path === "/dashboard") setActiveTab("dashboard");
@@ -60,16 +75,25 @@ const UserDashboard = () => {
     else if (path === "/support") setActiveTab("support"); // Added for support
 
     // Set user data
-    setUserData({
-      name: "John Student",
-      email: "john@student.edu",
-      studentId: "STU2024001",
-      avatarColor: "#8b5cf6",
-    });
-  }, [location]);
+    const savedUser = localStorage.getItem("user");
+    if (savedUser) {
+      setUserData(JSON.parse(savedUser));
+    } else {
+      setUserData({
+        name: "John Student",
+        email: "john@student.edu",
+        studentId: "STU2024001",
+        avatarColor: "#8b5cf6",
+        role: "student",
+      });
+    }
+  }, [navigate, location]);
 
   const handleLogout = () => {
     localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("userType");
+    localStorage.removeItem("user");
+    localStorage.removeItem("isAdmin");
     navigate("/login");
   };
 
