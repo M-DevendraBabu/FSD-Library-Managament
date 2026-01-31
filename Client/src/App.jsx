@@ -9,7 +9,9 @@ import MyIssuedBooks from "./components/MyIssuedBooksPage";
 import ReserveBook from "./components/ReserveBookPage";
 import BookDetails from "./components/BookDetailspage";
 import RecommendationPage from "./components/RecommendationPage";
-import NotificationPage from "./components/NotificationPage"; // Import the new NotificationPage
+import NotificationPage from "./components/NotificationPage";
+import Profile from "./components/Profile"; // Import the Profile component
+import Support from "./components/Support"; // ADDED: Import Support component
 
 function App() {
   const location = useLocation();
@@ -162,7 +164,6 @@ function App() {
             }
           />
 
-          {/* RecommendationPage route */}
           <Route
             path="/recommendations"
             element={
@@ -182,7 +183,6 @@ function App() {
             }
           />
 
-          {/* NotificationPage route */}
           <Route
             path="/notifications"
             element={
@@ -202,9 +202,8 @@ function App() {
             }
           />
 
-          {/* Profile route (optional - if you create a separate ProfilePage component) */}
-          {/* Uncomment and add if you create a separate ProfilePage component */}
-          {/* <Route
+          {/* Profile Route */}
+          <Route
             path="/profile"
             element={
               isAuthenticated ? (
@@ -215,13 +214,33 @@ function App() {
                   transition={{ duration: 0.3 }}
                   className="page-content"
                 >
-                  <ProfilePage />
+                  <Profile />
                 </motion.div>
               ) : (
                 <Navigate to="/login" />
               )
             }
-          /> */}
+          />
+
+          {/* ADDED: Support Route */}
+          <Route
+            path="/support"
+            element={
+              isAuthenticated ? (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
+                  className="page-content"
+                >
+                  <Support />
+                </motion.div>
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
 
           {/* Optional: 404 redirect */}
           <Route
