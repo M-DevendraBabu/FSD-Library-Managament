@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {
   ArrowRight,
   Users,
@@ -12,6 +13,57 @@ import { motion } from "framer-motion";
 import libraryBg from "../assets/library-bg.jpg";
 
 const Home = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check if user is already logged in
+    const token =
+      localStorage.getItem("token") || sessionStorage.getItem("token");
+    const userRole =
+      localStorage.getItem("userRole") || sessionStorage.getItem("userRole");
+
+    if (token) {
+      setIsAuthenticated(true);
+    }
+  }, []);
+
+  const handleLoginClick = (e) => {
+    e.preventDefault();
+    // Clear any previous authentication to ensure fresh login
+    localStorage.removeItem("token");
+    localStorage.removeItem("userRole");
+    localStorage.removeItem("isAdmin");
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("userRole");
+    sessionStorage.removeItem("isAdmin");
+
+    // Navigate to login page
+    navigate("/login");
+  };
+
+  const handleRegisterClick = (e) => {
+    e.preventDefault();
+    // Clear any authentication data for fresh registration
+    localStorage.removeItem("token");
+    localStorage.removeItem("userRole");
+    localStorage.removeItem("isAdmin");
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("userRole");
+    sessionStorage.removeItem("isAdmin");
+
+    // Navigate to register page
+    navigate("/register");
+  };
+
+  const handleLogout = () => {
+    localStorage.clear();
+    sessionStorage.clear();
+    setIsAuthenticated(false);
+    navigate("/");
+    window.location.reload(); // Refresh to clear any state
+  };
+
   return (
     <div>
       <section
@@ -36,6 +88,7 @@ const Home = () => {
           }}
         />
 
+        {/* Top-right Login/Register or Logout/Dashboard buttons */}
         <div
           style={{
             position: "absolute",
@@ -46,12 +99,34 @@ const Home = () => {
             zIndex: 2,
           }}
         >
-          <Link to="/login" className="btn btn-primary btn-tilt">
-            Login
-          </Link>
-          <Link to="/register" className="btn btn-primary btn-tilt">
-            Register
-          </Link>
+          {isAuthenticated ? (
+            <>
+              <button
+                onClick={handleLogout}
+                className="btn btn-primary btn-tilt"
+              >
+                Logout
+              </button>
+              <Link to="/user-dashboard" className="btn btn-primary btn-tilt">
+                Dashboard
+              </Link>
+            </>
+          ) : (
+            <>
+              <button
+                onClick={handleLoginClick}
+                className="btn btn-primary btn-tilt"
+              >
+                Login
+              </button>
+              <button
+                onClick={handleRegisterClick}
+                className="btn btn-primary btn-tilt"
+              >
+                Register
+              </button>
+            </>
+          )}
         </div>
 
         <div
@@ -113,23 +188,8 @@ const Home = () => {
             powerful system.
           </motion.p>
 
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            style={{ display: "flex", gap: "1.2rem" }}
-          >
-            <Link to="/register" className="btn btn-primary btn-tilt">
-              Get Started <ArrowRight size={20} />
-            </Link>
-            <Link
-              to="/login"
-              className="btn btn-outline"
-              style={{ color: "white", borderColor: "rgba(255,255,255,0.5)" }}
-            >
-              Login
-            </Link>
-          </motion.div>
+          {/* Removed the Get Started and Login buttons from here */}
+          {/* Only kept the top-right buttons for navigation */}
         </div>
       </section>
 
@@ -213,16 +273,29 @@ const Home = () => {
               Join hundreds of institutions already using LibraFlow to manage
               their libraries efficiently.
             </p>
-            <Link
-              to="/register"
-              className="btn btn-primary btn-tilt"
-              style={{
-                fontSize: "1.125rem",
-                padding: "0.875rem 2.5rem",
-              }}
-            >
-              Start Free Trial <ArrowRight size={20} />
-            </Link>
+            {isAuthenticated ? (
+              <Link
+                to="/user-dashboard"
+                className="btn btn-primary btn-tilt"
+                style={{
+                  fontSize: "1.125rem",
+                  padding: "0.875rem 2.5rem",
+                }}
+              >
+                Go to Dashboard <ArrowRight size={20} />
+              </Link>
+            ) : (
+              <button
+                onClick={handleRegisterClick}
+                className="btn btn-primary btn-tilt"
+                style={{
+                  fontSize: "1.125rem",
+                  padding: "0.875rem 2.5rem",
+                }}
+              >
+                Start Free Trial <ArrowRight size={20} />
+              </button>
+            )}
           </div>
         </div>
       </section>
