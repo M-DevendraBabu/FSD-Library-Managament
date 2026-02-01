@@ -82,7 +82,7 @@ const UserManagementPage = () => {
   };
 
   const handleBackToDashboard = () => {
-    navigate("/admin/dashboard");
+    navigate("/dashboard");
   };
 
   const handleUpdateStatus = (userId, newStatus) => {

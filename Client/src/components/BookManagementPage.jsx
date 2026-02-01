@@ -122,7 +122,7 @@ const BookManagementPage = () => {
   };
 
   const handleBackToDashboard = () => {
-    navigate("/admin/dashboard");
+    navigate("/dashboard");
   };
 
   const handleAddBook = () => {

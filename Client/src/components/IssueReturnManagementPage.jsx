@@ -101,7 +101,7 @@ const IssueReturnManagementPage = () => {
   };
 
   const handleBackToDashboard = () => {
-    navigate("/admin/dashboard");
+    navigate("/dashboard");
   };
 
   const handleIssueBook = () => {

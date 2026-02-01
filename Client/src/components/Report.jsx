@@ -63,7 +63,7 @@ const Report = () => {
   };
 
   const handleBackToDashboard = () => {
-    navigate("/admin/dashboard");
+    navigate("/dashboard");
   };
 
   const handleGenerateReport = () => {
