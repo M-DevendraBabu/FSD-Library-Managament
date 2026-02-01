@@ -33,7 +33,7 @@ import {
   Coffee,
   BookText,
   Brain,
-  HelpCircle, // Added for Help & Support
+  HelpCircle,
 } from "lucide-react";
 
 const UserDashboard = () => {
@@ -44,44 +44,67 @@ const UserDashboard = () => {
   const [userData, setUserData] = useState(null);
   const [hoveredCard, setHoveredCard] = useState(null);
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   // Add authentication check at the beginning
   useEffect(() => {
     const isLoggedIn = localStorage.getItem("isLoggedIn");
     const userType = localStorage.getItem("userType");
+    const isAdmin = localStorage.getItem("isAdmin");
 
-    if (!isLoggedIn) {
+    // If not logged in, redirect to login
+    if (!isLoggedIn || isLoggedIn !== "true") {
       navigate("/login");
       return;
     }
 
     // If admin tries to access user dashboard, redirect to admin dashboard
-    if (userType === "admin") {
+    if (isAdmin === "true" || userType === "admin") {
       navigate("/admin-dashboard");
       return;
     }
 
+    // Set authentication state
+    setIsAuthenticated(true);
+
     // Get active tab from URL
     const path = location.pathname;
-    if (path === "/dashboard") setActiveTab("dashboard");
-    else if (path === "/catalog") setActiveTab("catalog");
-    else if (path === "/my-books") setActiveTab("my-books");
-    else if (path === "/reserve") setActiveTab("reserve");
-    else if (path === "/recommendations") setActiveTab("recommendations");
-    else if (path === "/notifications") setActiveTab("notifications");
-    else if (path === "/profile") setActiveTab("profile");
-    else if (path === "/book-details") setActiveTab("book-details");
-    else if (path === "/insights") setActiveTab("insights");
-    else if (path === "/support") setActiveTab("support"); // Added for support
+    const tabMap = {
+      "/dashboard": "dashboard",
+      "/catalog": "catalog",
+      "/my-books": "my-books",
+      "/reserve": "reserve",
+      "/recommendations": "recommendations",
+      "/notifications": "notifications",
+      "/profile": "profile",
+      "/book-details": "book-details",
+      "/insights": "insights",
+      "/support": "support",
+    };
+
+    const tab = tabMap[path] || "dashboard";
+    setActiveTab(tab);
 
     // Set user data
     const savedUser = localStorage.getItem("user");
     if (savedUser) {
-      setUserData(JSON.parse(savedUser));
+      try {
+        setUserData(JSON.parse(savedUser));
+      } catch (error) {
+        // If parsing fails, set default user data
+        setUserData({
+          name: "John Student",
+          email: "student@college.edu",
+          studentId: "STU2024001",
+          avatarColor: "#8b5cf6",
+          role: "student",
+        });
+      }
     } else {
+      // Set default user data if not found
       setUserData({
         name: "John Student",
-        email: "john@student.edu",
+        email: "student@college.edu",
         studentId: "STU2024001",
         avatarColor: "#8b5cf6",
         role: "student",
@@ -154,7 +177,6 @@ const UserDashboard = () => {
       path: "/profile",
       gradient: "linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)",
     },
-    // ADDED: Help & Support Option
     {
       id: "support",
       label: "Help & Support",
@@ -1245,6 +1267,33 @@ const UserDashboard = () => {
     </div>
   );
 
+  // Render loading state if not authenticated
+  if (!isAuthenticated) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "100vh",
+          background: "linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%)",
+        }}
+      >
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+          style={{
+            width: "50px",
+            height: "50px",
+            border: "4px solid #e2e8f0",
+            borderTop: "4px solid #4f46e5",
+            borderRadius: "50%",
+          }}
+        />
+      </div>
+    );
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -1466,32 +1515,6 @@ const UserDashboard = () => {
           </motion.div>
         </div>
       </motion.aside>
-
-      {/* Mobile Menu Button - Only show on mobile */}
-      <motion.button
-        initial={{ opacity: 0, x: -20 }}
-        animate={{ opacity: 1, x: 0 }}
-        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-        style={{
-          display: "none",
-          position: "fixed",
-          top: "1.5rem",
-          left: "1.5rem",
-          zIndex: 1000,
-          background: "linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)",
-          color: "white",
-          border: "none",
-          borderRadius: "12px",
-          width: "44px",
-          height: "44px",
-          cursor: "pointer",
-          alignItems: "center",
-          justifyContent: "center",
-          boxShadow: "0 10px 30px rgba(79, 70, 229, 0.3)",
-        }}
-      >
-        <Menu size={20} />
-      </motion.button>
 
       {/* Main Content */}
       <main
@@ -1788,7 +1811,7 @@ const UserDashboard = () => {
             {activeTab === "recommendations" && renderRecommendations()}
             {activeTab === "notifications" && renderNotifications()}
             {activeTab === "profile" && renderProfile()}
-            {activeTab === "support" && renderSupport()} {/* Added Support */}
+            {activeTab === "support" && renderSupport()}
             {activeTab === "insights" && renderInsights()}
           </motion.div>
         </AnimatePresence>

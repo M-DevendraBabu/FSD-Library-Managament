@@ -14,7 +14,7 @@ import libraryBg from "../assets/login-bg.jpg";
 
 const Login = () => {
   const navigate = useNavigate();
-  const [role, setRole] = useState("student");
+  const [role, setRole] = useState("user"); // CHANGED: "student" → "user"
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -29,14 +29,12 @@ const Login = () => {
     setTimeout(() => {
       setIsLoading(false);
 
-      // Store authentication data - FIXED: Now storing userType
+      // Store authentication data
       localStorage.setItem("isLoggedIn", "true");
       localStorage.setItem("userType", role);
 
-      // For admin users, set additional admin flag
       if (role === "admin") {
         localStorage.setItem("isAdmin", "true");
-        // Set default admin credentials
         localStorage.setItem(
           "user",
           JSON.stringify({
@@ -45,23 +43,21 @@ const Login = () => {
             role: "admin",
           }),
         );
+        navigate("/admin-dashboard");
       } else {
+        // CHANGED: role to "user" instead of "student"
+        localStorage.setItem("isAdmin", "false");
         localStorage.setItem(
           "user",
           JSON.stringify({
             name: "John Student",
             email: "student@college.edu",
             studentId: "STU2024001",
-            role: "student",
+            role: "user", // CHANGED: "student" → "user"
+            avatarColor: "#8b5cf6",
           }),
         );
-      }
-
-      // Redirect based on role - FIXED: Now correctly routes to admin-dashboard
-      if (role === "student") {
         navigate("/dashboard");
-      } else {
-        navigate("/admin-dashboard");
       }
     }, 1200);
   };
@@ -121,13 +117,17 @@ const Login = () => {
           {/* Role Toggle */}
           <div style={{ display: "flex", gap: "1rem", marginBottom: "1.5rem" }}>
             {[
-              { label: "Student", icon: <GraduationCap size={18} /> },
-              { label: "Admin", icon: <Shield size={18} /> },
+              {
+                label: "Student",
+                value: "user",
+                icon: <GraduationCap size={18} />,
+              }, // CHANGED: value to "user"
+              { label: "Admin", value: "admin", icon: <Shield size={18} /> },
             ].map((r) => (
               <div
-                key={r.label}
+                key={r.value}
                 onClick={() => {
-                  setRole(r.label.toLowerCase());
+                  setRole(r.value);
                   setFormData({ email: "", password: "" });
                 }}
                 style={{
@@ -135,12 +135,11 @@ const Login = () => {
                   padding: "0.6rem",
                   borderRadius: "0.6rem",
                   border:
-                    role === r.label.toLowerCase()
+                    role === r.value
                       ? "1px solid #4F46E5"
                       : "1px solid #E2E8F0",
-                  background:
-                    role === r.label.toLowerCase() ? "#EEF2FF" : "#FFF",
-                  color: role === r.label.toLowerCase() ? "#4F46E5" : "#000",
+                  background: role === r.value ? "#EEF2FF" : "#FFF",
+                  color: role === r.value ? "#4F46E5" : "#000",
                   display: "flex",
                   justifyContent: "center",
                   gap: "0.5rem",
@@ -197,7 +196,7 @@ const Login = () => {
             <button disabled={isLoading} style={loginBtn}>
               {isLoading
                 ? "Logging in..."
-                : `Login as ${role.charAt(0).toUpperCase() + role.slice(1)}`}
+                : `Login as ${role === "admin" ? "Admin" : "Student"}`}
               <ArrowRight size={18} />
             </button>
           </form>
