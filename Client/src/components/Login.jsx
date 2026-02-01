@@ -29,6 +29,9 @@ const Login = () => {
     setTimeout(() => {
       setIsLoading(false);
 
+      // Clear any previous data
+      localStorage.clear();
+
       // Store authentication data
       localStorage.setItem("isLoggedIn", "true");
       localStorage.setItem("userType", role);

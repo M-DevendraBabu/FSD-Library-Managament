@@ -43,73 +43,80 @@ const UserDashboard = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userData, setUserData] = useState(null);
   const [hoveredCard, setHoveredCard] = useState(null);
-  const [showUserMenu, setShowUserMenu] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   // Add authentication check at the beginning
   useEffect(() => {
-    const isLoggedIn = localStorage.getItem("isLoggedIn");
-    const userType = localStorage.getItem("userType");
-    const isAdmin = localStorage.getItem("isAdmin");
+    const checkAuth = () => {
+      const isLoggedIn = localStorage.getItem("isLoggedIn");
+      const userType = localStorage.getItem("userType");
+      const isAdmin = localStorage.getItem("isAdmin");
 
-    // If not logged in, redirect to login
-    if (!isLoggedIn || isLoggedIn !== "true") {
-      navigate("/login");
-      return;
-    }
+      // If not logged in, redirect to login
+      if (!isLoggedIn || isLoggedIn !== "true") {
+        navigate("/login");
+        return;
+      }
 
-    // If admin tries to access user dashboard, redirect to admin dashboard
-    if (isAdmin === "true" || userType === "admin") {
-      navigate("/admin-dashboard");
-      return;
-    }
+      // If admin tries to access user dashboard, redirect to admin dashboard
+      if (isAdmin === "true" || userType === "admin") {
+        navigate("/admin-dashboard");
+        return;
+      }
 
-    // Set authentication state
-    setIsAuthenticated(true);
+      // Set authentication state
+      setIsAuthenticated(true);
 
-    // Get active tab from URL
-    const path = location.pathname;
-    const tabMap = {
-      "/dashboard": "dashboard",
-      "/catalog": "catalog",
-      "/my-books": "my-books",
-      "/reserve": "reserve",
-      "/recommendations": "recommendations",
-      "/notifications": "notifications",
-      "/profile": "profile",
-      "/book-details": "book-details",
-      "/insights": "insights",
-      "/support": "support",
-    };
+      // Get active tab from URL
+      const path = location.pathname;
+      const tabMap = {
+        "/dashboard": "dashboard",
+        "/catalog": "catalog",
+        "/my-books": "my-books",
+        "/reserve": "reserve",
+        "/recommendations": "recommendations",
+        "/notifications": "notifications",
+        "/profile": "profile",
+        "/book-details": "book-details",
+        "/support": "support",
+      };
 
-    const tab = tabMap[path] || "dashboard";
-    setActiveTab(tab);
+      const tab = tabMap[path] || "dashboard";
+      setActiveTab(tab);
 
-    // Set user data
-    const savedUser = localStorage.getItem("user");
-    if (savedUser) {
-      try {
-        setUserData(JSON.parse(savedUser));
-      } catch (error) {
-        // If parsing fails, set default user data
+      // Set user data
+      const savedUser = localStorage.getItem("user");
+      if (savedUser) {
+        try {
+          const userData = JSON.parse(savedUser);
+          // Ensure role is "user" for students
+          if (userData.role === "student") {
+            userData.role = "user";
+          }
+          setUserData(userData);
+        } catch (error) {
+          // If parsing fails, set default user data
+          setUserData({
+            name: "John Student",
+            email: "student@college.edu",
+            studentId: "STU2024001",
+            avatarColor: "#8b5cf6",
+            role: "user",
+          });
+        }
+      } else {
+        // Set default user data if not found
         setUserData({
           name: "John Student",
           email: "student@college.edu",
           studentId: "STU2024001",
           avatarColor: "#8b5cf6",
-          role: "student",
+          role: "user",
         });
       }
-    } else {
-      // Set default user data if not found
-      setUserData({
-        name: "John Student",
-        email: "student@college.edu",
-        studentId: "STU2024001",
-        avatarColor: "#8b5cf6",
-        role: "student",
-      });
-    }
+    };
+
+    checkAuth();
   }, [navigate, location]);
 
   const handleLogout = () => {
@@ -1240,33 +1247,6 @@ const UserDashboard = () => {
     </div>
   );
 
-  // Insights Page (kept for compatibility)
-  const renderInsights = () => (
-    <div
-      style={{
-        textAlign: "center",
-        padding: "4rem",
-        color: "#64748b",
-        background: "white",
-        borderRadius: "24px",
-        boxShadow: "0 20px 60px rgba(0,0,0,0.08)",
-      }}
-    >
-      <BarChart2 size={60} style={{ marginBottom: "1rem", opacity: 0.5 }} />
-      <h2
-        style={{
-          marginBottom: "0.5rem",
-          fontSize: "1.5rem",
-          fontWeight: "700",
-          color: "#1e293b",
-        }}
-      >
-        Reading Insights
-      </h2>
-      <p>AI recommendations and reading statistics will appear here.</p>
-    </div>
-  );
-
   // Render loading state if not authenticated
   if (!isAuthenticated) {
     return (
@@ -1812,7 +1792,6 @@ const UserDashboard = () => {
             {activeTab === "notifications" && renderNotifications()}
             {activeTab === "profile" && renderProfile()}
             {activeTab === "support" && renderSupport()}
-            {activeTab === "insights" && renderInsights()}
           </motion.div>
         </AnimatePresence>
       </main>

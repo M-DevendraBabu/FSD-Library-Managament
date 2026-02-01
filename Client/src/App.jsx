@@ -32,6 +32,7 @@ function App() {
     <div className="app-wrapper">
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
+          {/* ==================== PUBLIC ROUTES ==================== */}
           <Route
             path="/"
             element={
@@ -50,30 +51,42 @@ function App() {
           <Route
             path="/login"
             element={
-              <motion.div
-                initial={{ x: 100, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                exit={{ x: -100, opacity: 0 }}
-                transition={{ duration: 0.4 }}
-                className="page-content"
-              >
-                <Login />
-              </motion.div>
+              isAuthenticated ? (
+                <Navigate
+                  to={userType === "admin" ? "/admin-dashboard" : "/dashboard"}
+                />
+              ) : (
+                <motion.div
+                  initial={{ x: 100, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  exit={{ x: -100, opacity: 0 }}
+                  transition={{ duration: 0.4 }}
+                  className="page-content"
+                >
+                  <Login />
+                </motion.div>
+              )
             }
           />
 
           <Route
             path="/register"
             element={
-              <motion.div
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.9, opacity: 0 }}
-                transition={{ duration: 0.4 }}
-                className="page-content"
-              >
-                <Register />
-              </motion.div>
+              isAuthenticated ? (
+                <Navigate
+                  to={userType === "admin" ? "/admin-dashboard" : "/dashboard"}
+                />
+              ) : (
+                <motion.div
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.9, opacity: 0 }}
+                  transition={{ duration: 0.4 }}
+                  className="page-content"
+                >
+                  <Register />
+                </motion.div>
+              )
             }
           />
 
@@ -94,9 +107,9 @@ function App() {
                 </motion.div>
               ) : isAuthenticated && userType === "admin" ? (
                 // If admin tries to access user dashboard, redirect to admin dashboard
-                <Navigate to="/admin-dashboard" />
+                <Navigate to="/admin-dashboard" replace />
               ) : (
-                <Navigate to="/login" />
+                <Navigate to="/login" replace />
               )
             }
           />
@@ -115,9 +128,9 @@ function App() {
                   <BookCatalog />
                 </motion.div>
               ) : isAuthenticated && userType === "admin" ? (
-                <Navigate to="/admin-dashboard" />
+                <Navigate to="/admin-dashboard" replace />
               ) : (
-                <Navigate to="/login" />
+                <Navigate to="/login" replace />
               )
             }
           />
@@ -136,9 +149,9 @@ function App() {
                   <MyIssuedBooks />
                 </motion.div>
               ) : isAuthenticated && userType === "admin" ? (
-                <Navigate to="/admin-dashboard" />
+                <Navigate to="/admin-dashboard" replace />
               ) : (
-                <Navigate to="/login" />
+                <Navigate to="/login" replace />
               )
             }
           />
@@ -157,9 +170,9 @@ function App() {
                   <ReserveBook />
                 </motion.div>
               ) : isAuthenticated && userType === "admin" ? (
-                <Navigate to="/admin-dashboard" />
+                <Navigate to="/admin-dashboard" replace />
               ) : (
-                <Navigate to="/login" />
+                <Navigate to="/login" replace />
               )
             }
           />
@@ -178,9 +191,9 @@ function App() {
                   <BookDetails />
                 </motion.div>
               ) : isAuthenticated && userType === "admin" ? (
-                <Navigate to="/admin-dashboard" />
+                <Navigate to="/admin-dashboard" replace />
               ) : (
-                <Navigate to="/login" />
+                <Navigate to="/login" replace />
               )
             }
           />
@@ -199,9 +212,9 @@ function App() {
                   <RecommendationPage />
                 </motion.div>
               ) : isAuthenticated && userType === "admin" ? (
-                <Navigate to="/admin-dashboard" />
+                <Navigate to="/admin-dashboard" replace />
               ) : (
-                <Navigate to="/login" />
+                <Navigate to="/login" replace />
               )
             }
           />
@@ -220,9 +233,9 @@ function App() {
                   <NotificationPage />
                 </motion.div>
               ) : isAuthenticated && userType === "admin" ? (
-                <Navigate to="/admin-dashboard" />
+                <Navigate to="/admin-dashboard" replace />
               ) : (
-                <Navigate to="/login" />
+                <Navigate to="/login" replace />
               )
             }
           />
@@ -242,7 +255,7 @@ function App() {
                   <Profile />
                 </motion.div>
               ) : (
-                <Navigate to="/login" />
+                <Navigate to="/login" replace />
               )
             }
           />
@@ -262,7 +275,7 @@ function App() {
                   <Support />
                 </motion.div>
               ) : (
-                <Navigate to="/login" />
+                <Navigate to="/login" replace />
               )
             }
           />
@@ -284,9 +297,9 @@ function App() {
                 </motion.div>
               ) : isAuthenticated && userType === "user" ? (
                 // If user tries to access admin dashboard, redirect to user dashboard
-                <Navigate to="/dashboard" />
+                <Navigate to="/dashboard" replace />
               ) : (
-                <Navigate to="/login" />
+                <Navigate to="/login" replace />
               )
             }
           />
@@ -306,9 +319,9 @@ function App() {
                   <UserManagementPage />
                 </motion.div>
               ) : isAuthenticated && userType === "user" ? (
-                <Navigate to="/dashboard" />
+                <Navigate to="/dashboard" replace />
               ) : (
-                <Navigate to="/login" />
+                <Navigate to="/login" replace />
               )
             }
           />
@@ -328,9 +341,9 @@ function App() {
                   <IssueReturnManagementPage />
                 </motion.div>
               ) : isAuthenticated && userType === "user" ? (
-                <Navigate to="/dashboard" />
+                <Navigate to="/dashboard" replace />
               ) : (
-                <Navigate to="/login" />
+                <Navigate to="/login" replace />
               )
             }
           />
@@ -350,9 +363,9 @@ function App() {
                   <Report />
                 </motion.div>
               ) : isAuthenticated && userType === "user" ? (
-                <Navigate to="/dashboard" />
+                <Navigate to="/dashboard" replace />
               ) : (
-                <Navigate to="/login" />
+                <Navigate to="/login" replace />
               )
             }
           />
@@ -372,29 +385,16 @@ function App() {
                   <BookManagementPage />
                 </motion.div>
               ) : isAuthenticated && userType === "user" ? (
-                <Navigate to="/dashboard" />
+                <Navigate to="/dashboard" replace />
               ) : (
-                <Navigate to="/login" />
+                <Navigate to="/login" replace />
               )
             }
           />
 
           {/* ==================== 404 REDIRECT ==================== */}
-          {/* Redirect based on user type */}
-          <Route
-            path="*"
-            element={
-              <Navigate
-                to={
-                  isAuthenticated
-                    ? userType === "admin"
-                      ? "/admin-dashboard"
-                      : "/dashboard"
-                    : "/"
-                }
-              />
-            }
-          />
+          {/* FIXED: Always redirect to landing page for unmatched routes */}
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </AnimatePresence>
     </div>
