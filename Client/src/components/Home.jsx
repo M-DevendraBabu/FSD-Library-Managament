@@ -1,67 +1,59 @@
-import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   ArrowRight,
-  Users,
-  Lock,
-  BookOpen,
-  Shield,
   Search,
   UserCheck,
+  Shield,
 } from "lucide-react";
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import libraryBg from "../assets/library-bg.jpg";
 
 const Home = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
 
+  // ✅ Auth check ONLY on load
   useEffect(() => {
-    // Check if user is already logged in
     const token =
       localStorage.getItem("token") || sessionStorage.getItem("token");
-    const userRole =
-      localStorage.getItem("userRole") || sessionStorage.getItem("userRole");
 
-    if (token) {
+    if (token && token !== "undefined" && token !== "null") {
       setIsAuthenticated(true);
+    } else {
+      setIsAuthenticated(false);
     }
   }, []);
 
-  const handleLoginClick = (e) => {
-    e.preventDefault();
-    // Clear any previous authentication to ensure fresh login
+  // ✅ Clear auth properly
+  const clearAuth = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("userRole");
     localStorage.removeItem("isAdmin");
+
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("userRole");
     sessionStorage.removeItem("isAdmin");
+  };
 
-    // Navigate to login page
+  const handleLoginClick = (e) => {
+    e.preventDefault();
+    clearAuth();
+    setIsAuthenticated(false);
     navigate("/login");
   };
 
   const handleRegisterClick = (e) => {
     e.preventDefault();
-    // Clear any authentication data for fresh registration
-    localStorage.removeItem("token");
-    localStorage.removeItem("userRole");
-    localStorage.removeItem("isAdmin");
-    sessionStorage.removeItem("token");
-    sessionStorage.removeItem("userRole");
-    sessionStorage.removeItem("isAdmin");
-
-    // Navigate to register page
+    clearAuth();
+    setIsAuthenticated(false);
     navigate("/register");
   };
 
   const handleLogout = () => {
-    localStorage.clear();
-    sessionStorage.clear();
+    clearAuth();
     setIsAuthenticated(false);
     navigate("/");
-    window.location.reload(); // Refresh to clear any state
   };
 
   return (
@@ -78,6 +70,7 @@ const Home = () => {
           color: "#fff",
         }}
       >
+        {/* Overlay */}
         <div
           style={{
             position: "absolute",
@@ -88,7 +81,7 @@ const Home = () => {
           }}
         />
 
-        {/* Top-right Login/Register or Logout/Dashboard buttons */}
+        {/* Top Buttons */}
         <div
           style={{
             position: "absolute",
@@ -107,7 +100,10 @@ const Home = () => {
               >
                 Logout
               </button>
-              <Link to="/user-dashboard" className="btn btn-primary btn-tilt">
+              <Link
+                to="/user-dashboard"
+                className="btn btn-primary btn-tilt"
+              >
                 Dashboard
               </Link>
             </>
@@ -129,6 +125,7 @@ const Home = () => {
           )}
         </div>
 
+        {/* Hero Content */}
         <div
           className="container"
           style={{
@@ -160,7 +157,7 @@ const Home = () => {
           <motion.h1
             initial={{ opacity: 0, y: 25 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.1 }}
+            transition={{ duration: 0.8 }}
             style={{
               fontSize: "clamp(2.5rem, 5vw, 4rem)",
               fontWeight: "800",
@@ -175,7 +172,7 @@ const Home = () => {
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
+            transition={{ duration: 0.7 }}
             style={{
               fontSize: "1.1rem",
               maxWidth: "650px",
@@ -184,118 +181,32 @@ const Home = () => {
             }}
           >
             A unified digital library platform for students and administrators.
-            Borrow books, track inventory, and manage accounts seamlessly in one
-            powerful system.
+            Borrow books, track inventory, and manage accounts seamlessly.
           </motion.p>
-
-          {/* Removed the Get Started and Login buttons from here */}
-          {/* Only kept the top-right buttons for navigation */}
         </div>
       </section>
 
+      {/* Features */}
       <section className="features-section">
         <div className="container">
-          <div style={{ textAlign: "center", marginBottom: "3rem" }}>
-            <h2 style={{ fontSize: "2.5rem", fontWeight: "bold" }}>
-              Why Choose LibraFlow?
-            </h2>
-            <p style={{ color: "#64748B" }}>Powerful features for everyone.</p>
-          </div>
-
           <div className="grid-3">
             <div className="feature-card">
-              <div className="feature-card-decoration"></div>
-              <div className="feature-icon-box">
-                <UserCheck size={32} />
-              </div>
+              <UserCheck size={32} />
               <h3>User Management</h3>
-              <p>
-                Manage students and staff with ease. Track user activity and
-                streamline onboarding with intuitive controls.
-              </p>
-              <span className="feature-badge">Easy Setup</span>
+              <p>Manage students and staff easily.</p>
             </div>
 
             <div className="feature-card">
-              <div className="feature-card-decoration"></div>
-              <div className="feature-icon-box">
-                <Search size={32} />
-              </div>
+              <Search size={32} />
               <h3>Digital Catalog</h3>
-              <p>
-                Search and manage books in real time. Advanced filtering and
-                instant availability checks at your fingertips.
-              </p>
-              <span className="feature-badge">Real-time Search</span>
+              <p>Search books in real time.</p>
             </div>
 
             <div className="feature-card">
-              <div className="feature-card-decoration"></div>
-              <div className="feature-icon-box">
-                <Shield size={32} />
-              </div>
+              <Shield size={32} />
               <h3>Secure Access</h3>
-              <p>
-                Role-based authentication ensures data security. Protect
-                sensitive information with granular permissions.
-              </p>
-              <span className="feature-badge">Enterprise Security</span>
+              <p>Role-based secure access.</p>
             </div>
-          </div>
-
-          <div
-            style={{
-              textAlign: "center",
-              marginTop: "4rem",
-              padding: "3rem",
-              background: "linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)",
-              borderRadius: "var(--radius-xl)",
-              border: "1px solid rgba(0, 0, 0, 0.05)",
-            }}
-          >
-            <h3
-              style={{
-                fontSize: "1.875rem",
-                fontWeight: "bold",
-                marginBottom: "1rem",
-              }}
-            >
-              Ready to Transform Your Library?
-            </h3>
-            <p
-              style={{
-                color: "#64748B",
-                fontSize: "1.125rem",
-                maxWidth: "600px",
-                margin: "0 auto 2rem",
-              }}
-            >
-              Join hundreds of institutions already using LibraFlow to manage
-              their libraries efficiently.
-            </p>
-            {isAuthenticated ? (
-              <Link
-                to="/user-dashboard"
-                className="btn btn-primary btn-tilt"
-                style={{
-                  fontSize: "1.125rem",
-                  padding: "0.875rem 2.5rem",
-                }}
-              >
-                Go to Dashboard <ArrowRight size={20} />
-              </Link>
-            ) : (
-              <button
-                onClick={handleRegisterClick}
-                className="btn btn-primary btn-tilt"
-                style={{
-                  fontSize: "1.125rem",
-                  padding: "0.875rem 2.5rem",
-                }}
-              >
-                Start Free Trial <ArrowRight size={20} />
-              </button>
-            )}
           </div>
         </div>
       </section>
