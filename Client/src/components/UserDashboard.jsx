@@ -1528,12 +1528,12 @@ const UserDashboard = () => {
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               style={{
                 display: "none",
-                background: "none",
+                background:"#f1f5f9",
                 border: "none",
                 cursor: "pointer",
                 padding: "0.5rem",
                 borderRadius: "8px",
-                background: "#f1f5f9",
+              
               }}
             >
               <Menu size={24} color="#64748b" />
