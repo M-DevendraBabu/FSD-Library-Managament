@@ -14,41 +14,55 @@ import libraryBg from "../assets/login-bg.jpg";
 
 const Login = () => {
   const navigate = useNavigate();
-  const [role, setRole] = useState("student");
+  const [role, setRole] = useState("user"); // CHANGED: "student" → "user"
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
+  const [formData, setFormData] = useState({ email: "", password: "" });
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
+  const handleChange = (e) =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleLogin = (e) => {
     e.preventDefault();
     setIsLoading(true);
 
-    // Clear form data before login
-    setFormData({
-      email: "",
-      password: "",
-    });
-
     setTimeout(() => {
       setIsLoading(false);
+
+      // Clear any previous data
+      localStorage.clear();
+
+      // Store authentication data
       localStorage.setItem("isLoggedIn", "true");
-      if (role === "student") {
-        navigate("/dashboard");
+      localStorage.setItem("userType", role);
+
+      if (role === "admin") {
+        localStorage.setItem("isAdmin", "true");
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            name: "Admin User",
+            email: "admin@library.com",
+            role: "admin",
+          }),
+        );
+        navigate("/admin-dashboard");
       } else {
-        alert("Admin Login Successful (Dashboard not created yet)");
+        // CHANGED: role to "user" instead of "student"
+        localStorage.setItem("isAdmin", "false");
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            name: "John Student",
+            email: "student@college.edu",
+            studentId: "STU2024001",
+            role: "user", // CHANGED: "student" → "user"
+            avatarColor: "#8b5cf6",
+          }),
+        );
+        navigate("/dashboard");
       }
-    }, 1500);
+    }, 1200);
   };
 
   return (
@@ -58,158 +72,210 @@ const Login = () => {
         backgroundImage: `url(${libraryBg})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
         position: "relative",
-        filter: "contrast(1.08) saturate(1.05)",
       }}
     >
+      {/* Overlay */}
       <div
         style={{
           position: "absolute",
           inset: 0,
           background: "rgba(0,0,0,0.55)",
-          zIndex: 0,
         }}
       />
 
       <motion.div
-        initial={{ opacity: 0, y: 25 }}
+        initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-        className="auth-page"
+        transition={{ duration: 0.6 }}
         style={{
           position: "relative",
-          zIndex: 1,
+          zIndex: 2,
           minHeight: "100vh",
           display: "flex",
-          alignItems: "center",
           justifyContent: "flex-end",
+          alignItems: "center",
           paddingRight: "12%",
         }}
       >
-        <div className="auth-card">
-          <div className="auth-header">
-            <h2 className="auth-title">
-              {role === "admin" ? "Admin Portal" : "Welcome Back"}
-            </h2>
-            <p className="auth-subtitle">
-              {role === "admin"
-                ? "Access library controls"
-                : "Access your digital library"}
-            </p>
+        {/* Card */}
+        <div
+          style={{
+            background: "#fff",
+            width: "420px",
+            padding: "2.5rem",
+            borderRadius: "1rem",
+            boxShadow: "0 20px 40px rgba(0,0,0,0.25)",
+          }}
+        >
+          <h2 style={{ fontSize: "1.8rem", fontWeight: 700 }}>
+            {role === "admin" ? "Admin Portal" : "Welcome Back"}
+          </h2>
+          <p style={{ color: "#64748B", marginBottom: "1.5rem" }}>
+            {role === "admin"
+              ? "Access library controls"
+              : "Access your digital library"}
+          </p>
+
+          {/* Role Toggle */}
+          <div style={{ display: "flex", gap: "1rem", marginBottom: "1.5rem" }}>
+            {[
+              {
+                label: "Student",
+                value: "user",
+                icon: <GraduationCap size={18} />,
+              }, // CHANGED: value to "user"
+              { label: "Admin", value: "admin", icon: <Shield size={18} /> },
+            ].map((r) => (
+              <div
+                key={r.value}
+                onClick={() => {
+                  setRole(r.value);
+                  setFormData({ email: "", password: "" });
+                }}
+                style={{
+                  flex: 1,
+                  padding: "0.6rem",
+                  borderRadius: "0.6rem",
+                  border:
+                    role === r.value
+                      ? "1px solid #4F46E5"
+                      : "1px solid #E2E8F0",
+                  background: role === r.value ? "#EEF2FF" : "#FFF",
+                  color: role === r.value ? "#4F46E5" : "#000",
+                  display: "flex",
+                  justifyContent: "center",
+                  gap: "0.5rem",
+                  cursor: "pointer",
+                  fontWeight: 600,
+                }}
+              >
+                {r.icon} {r.label}
+              </div>
+            ))}
           </div>
 
-          <div className="role-toggle">
-            <div
-              className={`role-option ${role === "student" ? "active" : ""}`}
-              onClick={() => {
-                setRole("student");
-                setFormData({ email: "", password: "" }); // Clear form when switching roles
-              }}
-            >
-              <GraduationCap size={18} /> Student
-            </div>
-            <div
-              className={`role-option ${role === "admin" ? "active" : ""}`}
-              onClick={() => {
-                setRole("admin");
-                setFormData({ email: "", password: "" }); // Clear form when switching roles
-              }}
-            >
-              <Shield size={18} /> Admin
-            </div>
-          </div>
-
+          {/* Form */}
           <form onSubmit={handleLogin}>
-            <div className="form-group">
-              <label className="form-label">Email Address</label>
-              <div className="input-wrapper">
-                <Mail className="input-icon" size={20} />
-                <input
-                  type="email"
-                  name="email"
-                  className="form-input"
-                  placeholder={
-                    role === "admin"
-                      ? "admin@library.com"
-                      : "student@college.edu"
-                  }
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  required
-                  autoComplete="off"
-                />
-              </div>
+            {/* Email */}
+            <label style={labelStyle}>Email Address</label>
+            <div style={inputWrapper}>
+              <Mail style={inputIcon} size={18} />
+              <input
+                type="email"
+                name="email"
+                placeholder={
+                  role === "admin" ? "admin@library.com" : "student@college.edu"
+                }
+                value={formData.email}
+                onChange={handleChange}
+                required
+                style={inputStyle}
+              />
             </div>
 
-            <div className="form-group">
-              <label className="form-label">Password</label>
-              <div className="input-wrapper">
-                <Lock className="input-icon" size={20} />
-                <input
-                  type={showPassword ? "text" : "password"}
-                  name="password"
-                  className="form-input"
-                  placeholder="•••••••••"
-                  value={formData.password}
-                  onChange={handleInputChange}
-                  style={{ paddingRight: "3rem" }}
-                  required
-                  autoComplete="new-password"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  style={{
-                    position: "absolute",
-                    right: "1rem",
-                    top: "50%",
-                    transform: "translateY(-50%)",
-                    background: "none",
-                    border: "none",
-                    cursor: "pointer",
-                    color: "#64748B",
-                  }}
-                >
-                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                </button>
-              </div>
+            {/* Password */}
+            <label style={labelStyle}>Password</label>
+            <div style={{ ...inputWrapper, marginBottom: "1.2rem" }}>
+              <Lock style={inputIcon} size={18} />
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="••••••••"
+                value={formData.password}
+                onChange={handleChange}
+                required
+                style={{ ...inputStyle, paddingRight: "3rem" }}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                style={eyeBtn}
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
             </div>
 
-            <button className="btn btn-primary btn-full" disabled={isLoading}>
+            <button disabled={isLoading} style={loginBtn}>
               {isLoading
                 ? "Logging in..."
-                : `Login as ${
-                    role.charAt(0).toUpperCase() + role.slice(1)
-                  }`}{" "}
+                : `Login as ${role === "admin" ? "Admin" : "Student"}`}
               <ArrowRight size={18} />
             </button>
           </form>
 
-          <div
+          <p
             style={{
-              marginTop: "1.5rem",
               textAlign: "center",
-              fontSize: "0.9rem",
+              marginTop: "1.5rem",
               color: "#64748B",
             }}
           >
             Don&apos;t have an account?{" "}
-            <Link
-              to="/register"
-              style={{
-                color: "#4F46E5",
-                fontWeight: "600",
-                textDecoration: "none",
-              }}
-            >
+            <Link style={{ color: "#4F46E5", fontWeight: 600 }} to="/register">
               Create one
             </Link>
-          </div>
+          </p>
         </div>
       </motion.div>
     </div>
   );
+};
+
+/* 🔹 Internal Style Objects */
+const labelStyle = {
+  fontSize: "0.9rem",
+  fontWeight: 600,
+  marginBottom: "0.3rem",
+  display: "block",
+};
+
+const inputWrapper = {
+  position: "relative",
+  marginBottom: "1rem",
+};
+
+const inputIcon = {
+  position: "absolute",
+  left: "1rem",
+  top: "50%",
+  transform: "translateY(-50%)",
+  color: "#64748B",
+};
+
+const inputStyle = {
+  width: "100%",
+  padding: "0.75rem 1rem",
+  paddingLeft: "3rem",
+  borderRadius: "0.6rem",
+  border: "1px solid #E2E8F0",
+  fontSize: "0.95rem",
+};
+
+const eyeBtn = {
+  position: "absolute",
+  right: "1rem",
+  top: "50%",
+  transform: "translateY(-50%)",
+  background: "none",
+  border: "none",
+  cursor: "pointer",
+  color: "#64748B",
+};
+
+const loginBtn = {
+  width: "100%",
+  padding: "0.8rem",
+  borderRadius: "0.6rem",
+  background: "#4F46E5",
+  color: "#FFF",
+  border: "none",
+  fontWeight: 600,
+  fontSize: "1rem",
+  cursor: "pointer",
+  display: "flex",
+  justifyContent: "center",
+  gap: "0.5rem",
 };
 
 export default Login;
